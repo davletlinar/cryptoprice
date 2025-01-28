@@ -1,0 +1,44 @@
+# compose.yaml
+services:
+  influxdb2:
+    image: influxdb:2
+    container_name: influxdb2
+    restart: always
+    ports:
+      - 8086:8086
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB2_ADMIN_USERNAME}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB2_ADMIN_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB2_ADMIN_TOKEN}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB2_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB2_BUCKET}
+    volumes:
+      - ./influxdb2-data:/var/lib/influxdb2
+      - ./influxdb2-config:/etc/influxdb2
+    networks:
+      - influxdb2-network
+  
+  price-tracker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: price-tracker
+    restart: always
+    ports:
+      - 3020:3020
+    depends_on:
+      - influxdb2
+    environment:
+      INFLUXDB2_HOST: ${INFLUXDB2_HOST}
+      INFLUXDB2_PORT: ${INFLUXDB2_PORT}
+      INFLUXDB2_ORG: ${INFLUXDB2_ORG}
+      INFLUXDB2_BUCKET: ${INFLUXDB2_BUCKET}
+      INFLUXDB2_ADMIN_TOKEN: ${INFLUXDB2_ADMIN_TOKEN}
+    networks:
+      - influxdb2-network
+
+networks:
+  influxdb2-network:
+    name: influxdb2-network
+    driver: bridge
