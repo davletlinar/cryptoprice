@@ -1,0 +1,1 @@
+This app gets cryptocurrency prices from websocket and stores them in InfluxDB

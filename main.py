@@ -31,7 +31,7 @@ INFLUXDB2_ORG = os.getenv("INFLUXDB2_ORG")
 INFLUXDB2_BUCKET = os.getenv("INFLUXDB2_BUCKET")
 INFLUXDB2_URL = f"http://{INFLUXDB2_HOST}:{INFLUXDB2_PORT}"
 
-def wait_for_influxdb(url, max_retries=30, delay=2):
+def wait_for_influxdb(url, max_retries=30, delay=5) -> bool:
     """Wait for InfluxDB to be ready"""
     retry_count = 0
     while retry_count < max_retries:
@@ -118,7 +118,7 @@ async def handle_websocket_connection(websocket, state):
 
 async def connect_websocket() -> NoReturn:
     """Main WebSocket connection loop with reconnection logic"""
-    retry_delay = 1
+    retry_delay = 5
     max_retry_delay = 30
     max_retries = 10
     retry_count = 0
