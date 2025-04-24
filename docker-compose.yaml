@@ -13,10 +13,6 @@ services:
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB2_ADMIN_TOKEN}
       DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB2_ORG}
       DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB2_BUCKET}
-    secrets:
-      - influxdb2-admin-token
-      - influxdb2-admin-password
-      - influxdb2-admin-username
     volumes:
       - ./influxdb2-data:/var/lib/influxdb2
       - ./influxdb2-config:/etc/influxdb2
@@ -39,8 +35,6 @@ services:
       INFLUXDB2_ORG: ${INFLUXDB2_ORG}
       INFLUXDB2_BUCKET: ${INFLUXDB2_BUCKET}
       INFLUXDB2_ADMIN_TOKEN: ${INFLUXDB2_ADMIN_TOKEN}
-    secrets:
-      - influxdb2-admin-token
     networks:
       - influxdb2-network
 
@@ -48,11 +42,3 @@ networks:
   influxdb2-network:
     name: influxdb2-network
     driver: bridge
-
-secrets:
-  influxdb2-admin-token:
-    external: true
-  influxdb2-admin-password:
-    external: true
-  influxdb2-admin-username:
-    external: true
